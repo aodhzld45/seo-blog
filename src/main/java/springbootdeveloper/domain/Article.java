@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED )
 public class Article {
     @Id //id 필드를 기본키로 지정
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_seq_generator")
+//    @SequenceGenerator(name = "article_seq_generator", sequenceName = "article_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본키 자동으로 1증가
     @Column(name = "id", updatable = false)
     private Long id;

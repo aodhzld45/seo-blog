@@ -1,6 +1,11 @@
 spring:
   datasource:
     url: jdbc:h2:mem:testdb
+    username: sa
+#    driver-class-name: oracle.jdbc.driver.OracleDriver
+#    url: jdbc:oracle:thin:@localhost:1521/XE
+#    username: allfriends
+#    password: 1013
   h2:
     console:
       enabled: true
