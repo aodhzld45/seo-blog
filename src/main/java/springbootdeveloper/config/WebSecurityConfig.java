@@ -44,7 +44,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                     .logoutSuccessUrl("/login")
                     .invalidateHttpSession(true)
                     .and()
-                    .csrf().disable() // carf 비활성화 -> 보안 취약점 관련.
+                    .csrf().disable() // csrf 비활성화 -> 보안 취약점 관련.
                     .build();
 }
 
