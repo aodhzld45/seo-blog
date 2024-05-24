@@ -1,26 +1,33 @@
 package springbootdeveloper.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
+@Table(name = "article")
 @Entity // 엔티티로 지정
+@Setter
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED )
+@SequenceGenerator(
+        name="ARTICLE_SEQ_GEN", //시퀀스 제너레이터이름
+        sequenceName="article_seq", //시퀀스 이름
+        initialValue=1,
+        allocationSize=1
+)
+
 public class Article {
     @Id //id 필드를 기본키로 지정
 //    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_seq_generator")
 //    @SequenceGenerator(name = "article_seq_generator", sequenceName = "article_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본키 자동으로 1증가
-    @Column(name = "id", updatable = false)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+                        generator = "ARTICLE_SEQ_GEN") // 기본키 자동으로 1증가
+    @Column(name = "ano", updatable = false)
+    private Long ano;
 
     @Column(name = "title", nullable = false) // 'title'이라는 not null 컬럼과 매핑
     private String title;

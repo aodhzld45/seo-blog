@@ -43,18 +43,18 @@ public class BlogApiController {
     }
     
 // 블로그 글 조회 (글 상세) API
-    @GetMapping("/api/articles/{id}")
+    @GetMapping("/api/articles/{ano}")
     //@PathVariable URI값에 가변형 변수를 전달해서 처리하는 방식
-    public ResponseEntity<ArticleResponse> findById(@PathVariable long id) {
-        Article articles = blogService.findById(id);
+    public ResponseEntity<ArticleResponse> findById(@PathVariable long ano) {
+        Article articles = blogService.findById(ano);
         return ResponseEntity.ok()
                 .body(new ArticleResponse(articles));
     }
 
 // 블로그 글 삭제 API
     @DeleteMapping("/api/articles/{id}")
-    public ResponseEntity<Void> deleteArticle(@PathVariable long id) {
-        blogService.delete(id);
+    public ResponseEntity<Void> deleteArticle(@PathVariable long ano) {
+        blogService.delete(ano);
 
         return ResponseEntity.ok()
                 .build();
@@ -63,9 +63,9 @@ public class BlogApiController {
 
 //  블로그 글 수정 API
     @PutMapping("/api/articles/{id}")
-    public ResponseEntity<Article> updateArticle(@PathVariable Long id,
+    public ResponseEntity<Article> updateArticle(@PathVariable Long ano,
                                                  @RequestBody UpdateArticleRequest request){
-        Article updateArticle = blogService.update(id, request);
+        Article updateArticle = blogService.update(ano, request);
 
         return ResponseEntity.ok()
                 .body(updateArticle);

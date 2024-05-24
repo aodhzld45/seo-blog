@@ -32,21 +32,21 @@ public class BlogService {
     }
 
     // 블로그 글 조회(글 하나 상세) 메서드
-    public Article findById(long id) {
-        return blogRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("not found :" + id));
+    public Article findById(long ano) {
+        return blogRepository.findById(ano)
+                .orElseThrow(() -> new IllegalArgumentException("not found :" + ano));
     }
 
     // 블로그 글 삭제 메서드
-    public void delete(long id){
-        blogRepository.deleteById(id);
+    public void delete(long ano){
+        blogRepository.deleteById(ano);
     }
 
     // 블로그 글 수정 메서드
     @Transactional
-    public Article update(long id, UpdateArticleRequest request){
-        Article article = blogRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("not found : " + id));
+    public Article update(long ano, UpdateArticleRequest request){
+        Article article = blogRepository.findById(ano)
+                .orElseThrow(() -> new IllegalArgumentException("not found : " + ano));
 
         article.update(request.getTitle(),request.getContent());
 

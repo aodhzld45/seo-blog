@@ -2,6 +2,7 @@ package springbootdeveloper.controller;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
+@Slf4j
 public class BlogViewController {
 
     @Autowired
@@ -31,12 +33,13 @@ public class BlogViewController {
                 .toList();
         model.addAttribute("articles", articles); // 블로그 글 리스트 저장
 
+        log.info("articles = {} ", articles.toString());
         return "articleList"; // articleList.html 조회
     }
 
-    @GetMapping("/articles/{id}")
-    public String getArticle(@PathVariable long id, Model model){
-        Article article = blogService.findById(id);
+    @GetMapping("/articles/{ano}")
+    public String getArticle(@PathVariable long ano, Model model){
+        Article article = blogService.findById(ano);
         model.addAttribute("article", new ArticleViewResponse(article));
 
         return "article";
@@ -45,12 +48,12 @@ public class BlogViewController {
 
 //  새로운 글 수정 및 생성.
     @GetMapping("/new-article")
-    public String newArticle(@RequestParam(required = false) Long id, Model model) {
-        System.out.println("#### 현재 id의 상태는 : " + id);
-        if (id == null) {
+    public String newArticle(@RequestParam(required = false) Long ano, Model model) {
+        System.out.println("#### 현재 id의 상태는 : " + ano);
+        if (ano == null) {
             model.addAttribute("article", new ArticleViewResponse());
         } else {
-            Article article = blogService.findById(id);
+            Article article = blogService.findById(ano);
             model.addAttribute("article", new ArticleViewResponse(article));
         }
 
