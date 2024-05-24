@@ -20,7 +20,7 @@ public class UserService {
                 .email(dto.getEmail())
                 // 패스워드 암호화
                 .password(bCryptPasswordEncoder.encode(dto.getPassword()))
-                .build()).getId();
+                .build()).getUno();
 
 
 

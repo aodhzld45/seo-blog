@@ -27,8 +27,8 @@ public class User implements UserDetails { // UserDetails를 상속받아 인증
     @GeneratedValue(strategy=GenerationType.SEQUENCE,
                     generator="USER_SEQ_GEN")
 
-    @Column(name = "id", updatable = false)
-    private Long id;
+    @Column(name = "uno", updatable = false)
+    private Long uno;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
