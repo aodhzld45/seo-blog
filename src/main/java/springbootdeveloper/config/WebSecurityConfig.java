@@ -24,7 +24,7 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer confugure() {
         return (web) -> web.ignoring() // web.ignoring() 필터 적용 제외
-                .requestMatchers(toH2Console()) // http://localhost:8080/h2-console 접속 허용
+                //.requestMatchers(toH2Console()) // http://localhost:8080/h2-console 접속 허용
                 .requestMatchers("/static/**"); // 정적 파일 html, css, js등 Resources
     }
 

@@ -14,10 +14,19 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@SequenceGenerator(
+        name="USER_SEQ_GEN", //시퀀스 제너레이터이름
+        sequenceName="user_seq", //시퀀스 이름
+        initialValue=1,
+        allocationSize=1
+)
+
 public class User implements UserDetails { // UserDetails를 상속받아 인증 객체로 사용.
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE,
+                    generator="USER_SEQ_GEN")
+
     @Column(name = "id", updatable = false)
     private Long id;
 
