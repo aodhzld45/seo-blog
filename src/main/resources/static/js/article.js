@@ -4,8 +4,8 @@ const deleteButton = document.getElementById('delete-btn');
 if (deleteButton) {
     deleteButton.addEventListener('click', event => {
         alert('삭제 버튼 클릭됨');
-        let id = document.getElementById('article-id').value;
-         fetch(`/api/articles/${id}` , {
+        let ano = document.getElementById('article-ano').value;
+         fetch(`/api/articles/${ano}` , {
              method: 'DELETE'
          })
          .then(() => {
@@ -23,9 +23,9 @@ if (modifyButton) {
     modifyButton.addEventListener('click', event => {
         alert('수정 버튼 클릭됨');
         let params = new URLSearchParams(location.search);
-        let id = params.get('id');
+        let ano = params.get('ano');
 
-        fetch(`/api/articles/${id}` ,{
+        fetch(`/api/articles/${ano}` ,{
             method: 'PUT',
             headers: {
                 "Content-Type" : "application/json",
@@ -37,7 +37,7 @@ if (modifyButton) {
         })
         .then(() => {
             alert('수정이 완료되었습니다.');
-            location.replace(`/articles/${id}`);
+            location.replace(`/articles/${ano}`);
         });
 
     });

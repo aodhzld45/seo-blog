@@ -16,7 +16,7 @@
         <div class="col-lg-8">
           <article>
               <!--블로그 글 id 추가-->
-              <input type="hidden" id="article-id" th:value="${article.ano}">
+              <input type="hidden" id="article-ano" th:value="${article.ano}">
             <header class="mb-4">
               <h1 class="fw-bolder mb-1" th:text="${article.title}"></h1>
               <div class="text-muted fst-italic mb-2" th:text="|작성일 :
@@ -27,8 +27,8 @@
             <section class="mb-5">
               <p class="fs-5 mb-4" th:text="${article.content}"></p>
             </section>
-            <button type="button" id="modify-btn" th:onclick="|location.href='@{/new-article?ano={articleId}
-                        (articleId=${article.ano})}'|" class="btn btn-primary">수정</button>
+            <button type="button" id="modify-btn" th:onclick="|location.href='@{/new-article?ano={articleAno}
+                        (articleAno=${article.ano})}'|" class="btn btn-primary">수정</button>
             <button type="button" id="delete-btn" class="btn btn-danger">삭제</button>
 
           </article>

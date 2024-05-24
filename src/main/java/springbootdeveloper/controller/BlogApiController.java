@@ -52,7 +52,7 @@ public class BlogApiController {
     }
 
 // 블로그 글 삭제 API
-    @DeleteMapping("/api/articles/{id}")
+    @DeleteMapping("/api/articles/{ano}")
     public ResponseEntity<Void> deleteArticle(@PathVariable long ano) {
         blogService.delete(ano);
 
@@ -62,7 +62,7 @@ public class BlogApiController {
     }
 
 //  블로그 글 수정 API
-    @PutMapping("/api/articles/{id}")
+    @PutMapping("/api/articles/{ano}")
     public ResponseEntity<Article> updateArticle(@PathVariable Long ano,
                                                  @RequestBody UpdateArticleRequest request){
         Article updateArticle = blogService.update(ano, request);

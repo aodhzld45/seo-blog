@@ -15,16 +15,16 @@
     <div class="row">
         <div class="col-lg-8">
             <article>
-                <input type="hidden" id="article-ano" th:value="${article.ano}">
+                <input type="hidden" id="article-ano" th:value="${detail.ano}">
 
                 <header class="mb-4">
-                    <input type="text" class="form-control" placeholder="제목" id="title" th:value="${article.title}">
+                    <input type="text" class="form-control" placeholder="제목" id="title" th:value="${detail.title}">
                 </header>
                 <section class="mb-5">
-                    <textarea class="form-control h-25" rows="10" placeholder="내용" id="content" th:text="${article.content}"></textarea>
+                    <textarea class="form-control h-25" rows="10" placeholder="내용" id="content" th:text="${detail.content}"></textarea>
                 </section>
-                <button th:if="${article.id} != null" type="button" id="modify-btn" class="btn btn-primary btn-sm">수정</button>
-                <button th:if="${article.id} == null" type="button" id="create-btn" class="btn btn-primary btn-sm">등록</button>
+                <button th:if="${detail.ano} != null" type="button" id="modify-btn" class="btn btn-primary btn-sm">수정</button>
+                <button th:if="${detail.ano} == null" type="button" id="create-btn" class="btn btn-primary btn-sm">등록</button>
                 <button type="button" id="create-btn" class="btn btn-primary btn-sm">등록</button>
 
             </article>

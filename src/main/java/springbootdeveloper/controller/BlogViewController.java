@@ -49,12 +49,12 @@ public class BlogViewController {
 //  새로운 글 수정 및 생성.
     @GetMapping("/new-article")
     public String newArticle(@RequestParam(required = false) Long ano, Model model) {
-        System.out.println("#### 현재 id의 상태는 : " + ano);
+        System.out.println("#### 현재 ano의 상태는 : " + ano);
         if (ano == null) {
             model.addAttribute("article", new ArticleViewResponse());
         } else {
             Article article = blogService.findById(ano);
-            model.addAttribute("article", new ArticleViewResponse(article));
+            model.addAttribute("detail", new ArticleViewResponse(article));
         }
 
         return "newArticle";
