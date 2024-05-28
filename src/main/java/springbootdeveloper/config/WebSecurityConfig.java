@@ -1,66 +1,97 @@
 package springbootdeveloper.config;
 
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import springbootdeveloper.filter.JwtAuthenticationFilter;
 import springbootdeveloper.service.UserDetailService;
+
+import java.io.IOException;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @RequiredArgsConstructor
 @Configuration
+@EnableWebSecurity
 public class WebSecurityConfig {
 
-    private final UserDetailService userService;
-
-//    스프링 시큐리티 기능 비활성화
-    @Bean
-    public WebSecurityCustomizer confugure() {
-        return (web) -> web.ignoring() // web.ignoring() 필터 적용 제외
-                //.requestMatchers(toH2Console()) // http://localhost:8080/h2-console 접속 허용
-                .requestMatchers("/static/**"); // 정적 파일 html, css, js등 Resources
-    }
-
-//  특정 HTTP 요청에 대한 웹기반 보안 구성.
-@Bean
-public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-            return http
-                    .authorizeRequests() // 인증, 인가 설정
-                    .requestMatchers("/login", "/signup", "/user").permitAll()
-                    .anyRequest().authenticated()
-                    .and()
-                    .formLogin() // form 기반 로그인 설정
-                    .loginPage("/login")
-                    .defaultSuccessUrl("/articles")
-                    .and()
-                    .logout() // logout 설정
-                    .logoutSuccessUrl("/login")
-                    .invalidateHttpSession(true)
-                    .and()
-                    .csrf().disable() // csrf 비활성화 -> 보안 취약점 관련.
-                    .build();
-}
-
-// 인증 관리자 관련 설정.
-@Bean
-public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailService userDetailService) throws Exception {
-    return http.getSharedObject(AuthenticationManagerBuilder.class)
-            .userDetailsService(userService) // 사용자 정보 서비스 설정
-            .passwordEncoder(bCryptPasswordEncoder)
-            .and()
-            .build();
-}
+    //private final UserDetailService userService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean // 패스워드 Encoder로 사용할 빈 등록.
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
+                .cors(cors -> cors
+                        .configurationSource(corsConfigrationSource())
+                ).csrf().disable()
+                .httpBasic().disable()
+/*                .csrf(CsrfConfigurer::disable)
+                .httpBasic(HttpBasicConfigurer::disable)*/
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("/login", "/signup", "/user", "/", "/articles").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/board/**", "/api/v1/user/*").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(new FailedAuthenticationEntryPoint())
+                )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return httpSecurity.build();
+    }
+
+    @Bean
+    protected CorsConfigurationSource corsConfigrationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("*");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");  // Allow all headers
+        configuration.addExposedHeader("*");
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+}
+
+class FailedAuthenticationEntryPoint implements AuthenticationEntryPoint {
+
+    @Override
+    public void commence(HttpServletRequest request, HttpServletResponse response,
+                         AuthenticationException authException) throws IOException, ServletException {
+        response.setContentType("application/json");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write("{\"code\" : \"NP\", \"message\" : \"Do not have permission to access.\" }");
+
+
+    }
 }
